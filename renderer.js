@@ -66,6 +66,7 @@ function applyEffects() {
   applyDistortion();
 }
 
+//Grain
 function addGrain(amount) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imageData.data;
@@ -78,6 +79,7 @@ function addGrain(amount) {
   ctx.putImageData(imageData, 0, 0);
 }
 
+//Distort
 function applyDistortion() {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
@@ -102,10 +104,16 @@ function applyDistortion() {
     ctx.putImageData(imageData, 0, 0);
   }
 
+// Stratification
 function applyStratification() {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imageData.data;
-  const stratificationData = ctx.getImageData(0, 0, stratificationImg.width, stratificationImg.height).data;
+  const stratificationCanvas = document.createElement('canvas');
+  const stratificationCtx = stratificationCanvas.getContext('2d');
+  stratificationCanvas.width = stratificationImg.width;
+  stratificationCanvas.height = stratificationImg.height;
+  stratificationCtx.drawImage(stratificationImg, 0, 0);
+  const stratificationData = stratificationCtx.getImageData(0, 0, stratificationImg.width, stratificationImg.height).data;
   const threshold = stratificationThreshold.value;
   const xStrength = xStratificationStrength.value;
   const yStrength = yStratificationStrength.value;
@@ -115,20 +123,24 @@ function applyStratification() {
       const index = (y * canvas.width + x) * 4;
       const stratificationIndex = ((y % stratificationImg.height) * stratificationImg.width + (x % stratificationImg.width)) * 4;
       const stratificationValue = (stratificationData[stratificationIndex] + stratificationData[stratificationIndex + 1] + stratificationData[stratificationIndex + 2]) / 3;
-      const offsetX = (stratificationValue / 255 - 0.5) * xStrength;
-      const offsetY = (stratificationValue / 255 - 0.5) * yStrength;
-      const newX = Math.min(canvas.width - 1, Math.max(0, x + offsetX));
-      const newY = Math.min(canvas.height - 1, Math.max(0, y + offsetY));
-      const newIndex = (Math.floor(newY) * canvas.width + Math.floor(newX)) * 4;
+      
+      if (stratificationValue > threshold) {
+        const offsetX = (stratificationValue / 255 - 0.5) * xStrength;
+        const offsetY = (stratificationValue / 255 - 0.5) * yStrength;
+        const newX = Math.min(canvas.width - 1, Math.max(0, x + offsetX));
+        const newY = Math.min(canvas.height - 1, Math.max(0, y + offsetY));
+        const newIndex = (Math.floor(newY) * canvas.width + Math.floor(newX)) * 4;
 
-      data[index] = data[newIndex];
-      data[index + 1] = data[newIndex + 1];
-      data[index + 2] = data[newIndex + 2];
+        data[index] = data[newIndex];
+        data[index + 1] = data[newIndex + 1];
+        data[index + 2] = data[newIndex + 2];
+      }
     }
   }
   ctx.putImageData(imageData, 0, 0);
 }
 
+//Save
 document.getElementById('save').addEventListener('click', () => {
   const link = document.createElement('a');
   link.download = 'edited-image.png';
