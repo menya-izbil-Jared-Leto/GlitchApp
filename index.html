@@ -1,74 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Photo Editor</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .sliders {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-      }
-      .image-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      canvas {
-        border: 1px solid black;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Glitcher</h1>
-    <div class="sliders">
-      <div>
+<head>
+  <title>GlitcherApp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Glitcher</h1>
+  <div class="container">
+    <div class="tools">
+        <div class="slider">
+            <label for="size-slider">Size:</label>
+            <input type="range" id="size-slider" min="50" max="200" step="1" value="100">
+          </div>
+          <div class="slider">
+            <label for="gammaSlider">Gamma:</label>
+            <input type="range" id="gammaSlider" min="0.1" max="3" step="0.1" value="1" oninput="updateGamma()">
+          </div>
+          <div class="slider">
+            <label for="blackPointSlider">Black Point:</label>
+            <input type="range" id="blackPointSlider" min="0" max="255" value="0" oninput="updateBlackPoint()">
+          </div>
+          <div class="slider">
+            <label for="whitePointSlider">White Point:</label>
+            <input type="range" id="whitePointSlider" min="0" max="255" value="255" oninput="updateWhitePoint()">
+          </div>
+      <div class="slider">
         <label for="blur-slider">Blur:</label>
         <input type="range" id="blur-slider" min="0" max="10" step="0.1" value="0">
       </div>
-      <div>
+      <div class="slider">
         <label for="grain-slider">Grain:</label>
         <input type="range" id="grain-slider" min="0" max="1" step="0.01" value="0">
       </div>
-      <div>
-        <label for="size-slider">Size:</label>
-        <input type="range" id="size-slider" min="50" max="200" step="1" value="100">
+      <div class="slider">
+        <label for="dithering-slider">Dithering:</label>
+        <input type="range" id="dithering-slider" min="0" max="100" step="1" value="0">
       </div>
-      <div>
-        <label for="stratification-threshold">Stratification Threshold:</label>
-        <input type="range" id="stratification-threshold" min="0" max="100" step="1" value="0">
+      <div class="group">
+        <label>Stratification</label>
+        <div class="slider">
+          <label for="stratification-threshold">Threshold:</label>
+          <input type="range" id="stratification-threshold" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="slider">
+          <label for="x-stratification-strength">X Strength:</label>
+          <input type="range" id="x-stratification-strength" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="slider">
+          <label for="y-stratification-strength">Y Strength:</label>
+          <input type="range" id="y-stratification-strength" min="0" max="100" step="1" value="0">
+        </div>
       </div>
-      <div>
-        <label for="x-stratification-strength">X Stratification Strength:</label>
-        <input type="range" id="x-stratification-strength" min="0" max="100" step="1" value="0">
+      <div class="group">
+        <label>Distortion</label>
+        <div class="slider">
+          <label for="distortion-threshold">Threshold:</label>
+          <input type="range" id="distortion-threshold" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="slider">
+          <label for="x-distortion-strength">X Strength:</label>
+          <input type="range" id="x-distortion-strength" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="slider">
+          <label for="y-distortion-strength">Y Strength:</label>
+          <input type="range" id="y-distortion-strength" min="0" max="100" step="1" value="0">
+        </div>
       </div>
-      <div>
-        <label for="y-stratification-strength">Y Stratification Strength:</label>
-        <input type="range" id="y-stratification-strength" min="0" max="100" step="1" value="0">
-      </div>
-      <div>
-        <label for="distortion-threshold">Distortion Threshold:</label>
-        <input type="range" id="distortion-threshold" min="0" max="100" step="1" value="0">
-      </div>
-      <div>
-        <label for="x-distortion-strength">X Distortion Strength:</label>
-        <input type="range" id="x-distortion-strength" min="0" max="100" step="1" value="0">
-      </div>
-      <div>
-        <label for="y-distortion-strength">Y Distortion Strength:</label>
-        <input type="range" id="y-distortion-strength" min="0" max="100" step="1" value="0">
-      </div>
-    </div>
-    <div class="image-container">
-      <input type="file" id="upload" />
-      <input type="file" id="stratification-upload" />
-      <canvas id="canvas"></canvas>
       <button id="save">Save</button>
     </div>
-    <script src="renderer.js"></script>
-  </body>
+    <div class="image-container">
+      <label>Base image</label>
+      <input type="file" id="upload" />
+      <label>Stratification image</label>
+      <input type="file" id="stratification-upload" />
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
 </html>
