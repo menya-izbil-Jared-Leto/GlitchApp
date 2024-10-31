@@ -23,12 +23,12 @@ body {
     display: flex;
     gap: 10px;
     position: absolute;
-    left: 27px;
+    left: 28px;
 }
 
 .save-button {
     position: absolute;
-    right: 27px;
+    right: 28px;
 }
 
 .file-upload {
